@@ -1,12 +1,20 @@
 using UnityEngine;
+using UnityEngine.UI;
 
+[ExecuteInEditMode]
 [RequireComponent(typeof(AudioSource))]
 public class AudioDataGetter : MonoBehaviour
 {
+    [SerializeField]
+    private Text txtOutputVolume;
+
     private AudioSource audioSource;
 
     private float[] audioSamples;
     private const int audioSamplesSize = 512;
+
+    private float outputVolume;
+    public float OutputVolume { get => outputVolume; private set => outputVolume = value; }
 
     private void Awake()
     {
@@ -31,8 +39,16 @@ public class AudioDataGetter : MonoBehaviour
             sum += audioSamples[i] * audioSamples[i];
         }
 
-        float outputVolume = Mathf.Sqrt(sum / audioSamples.Length) * 100;
+        outputVolume = Mathf.Sqrt(sum / audioSamples.Length) * 100;
 
-        Debug.Log($"Volume: {outputVolume}");
+        LogOutputVolume();
+    }
+
+    private void LogOutputVolume()
+    {
+        string outputVolumeString = $"Output Volume: {outputVolume}";
+
+        Debug.Log(outputVolumeString);
+        txtOutputVolume.text = outputVolumeString;
     }
 }
